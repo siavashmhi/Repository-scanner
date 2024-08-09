@@ -16,12 +16,12 @@ api.add_resource(
     RepositoryResource,
     "/repositories",
     methods=["GET", "POST"],
-    endpoint="repositories",
+    endpoint="apiv1_repositories",
 )
 
 api.add_resource(
     RepositoryResource,
     "/repositories/<repository_id>",
     methods=["GET", "PATCH", "DELETE"],
-    endpoint="repository",
+    endpoint="apiv1_repository",
 )

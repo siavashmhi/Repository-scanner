@@ -10,6 +10,7 @@ python-dotenv = "*"
 watchdog = "*"
 blinker = "*"
 gunicorn = "*"
+flask-restful = "*"
 
 [dev-packages]
 black = "*"
