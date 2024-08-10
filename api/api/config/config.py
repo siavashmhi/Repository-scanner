@@ -10,10 +10,14 @@ class Config:
 
     SECRET_KEY = environ.get("GITVISOR_API_SECRET_KEY", "secretkey")
 
-    SQLALCHEMY_DATABASE_URI = environ.get("GITVISOR_API_DATABASE_URL", None)
+    SQLALCHEMY_DATABASE_URI = environ.get(
+        "GITVISOR_API_DATABASE_URL", "mysql+pymysql://root:root@127.0.0.1:33063/test"
+    )
 
     SQLALCHEMY_ECHO = DEBUG
 
     SQLALCHEMY_RECORD_QUERIES = DEBUG
 
     SQLALCHEMY_TRACK_MODIFICATIONS = DEBUG
+
+    TIMEZONE = environ.get("GITVISOR_API_TIMEZONE", "Europe/London")

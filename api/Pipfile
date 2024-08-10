@@ -15,6 +15,7 @@ flask-sqlalchemy = "*"
 flask-migrate = "*"
 pymysql = "*"
 cryptography = "*"
+pytz = "*"
 
 [dev-packages]
 black = "*"
