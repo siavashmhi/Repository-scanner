@@ -11,6 +11,10 @@ watchdog = "*"
 blinker = "*"
 gunicorn = "*"
 flask-restful = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+pymysql = "*"
+cryptography = "*"
 
 [dev-packages]
 black = "*"
