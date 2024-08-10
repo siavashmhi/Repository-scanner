@@ -1,3 +1,4 @@
+from api.model import Repository
 from api.util import jsonify
 
 

@@ -1,12 +1,8 @@
 from flask import Flask
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 
 from .config import Config
+from .object import db, mg
 from .view import apiv1_bp
-
-db = SQLAlchemy()
-mg = Migrate()
 
 
 def create_app():

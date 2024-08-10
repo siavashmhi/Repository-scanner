@@ -1,4 +1,4 @@
-from api.api import db
+from api.object import db
 from api.util import now, uuidgen
 
 
