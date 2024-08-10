@@ -12,7 +12,7 @@ class Config:
 
     SQLALCHEMY_DATABASE_URI = environ.get(
         "GITVISOR_API_DATABASE_URL",
-        "mysql+pymysql://root:siavash@127.0.0.1:33063/mysql",
+        "mysql+pymysql://root:siavash@127.0.0.1:33063/flask_db",
     )
 
     SQLALCHEMY_ECHO = DEBUG
