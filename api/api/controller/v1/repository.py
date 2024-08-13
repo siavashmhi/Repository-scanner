@@ -1,4 +1,5 @@
 from api.model import Repository
+from api.schema.v1 import RepositorySchema
 from api.util import jsonify
 
 

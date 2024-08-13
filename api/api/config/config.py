@@ -10,10 +10,8 @@ class Config:
 
     SECRET_KEY = environ.get("GITVISOR_API_SECRET_KEY", "secretkey")
 
-    SQLALCHEMY_DATABASE_URI = environ.get(
-        "GITVISOR_API_DATABASE_URL",
-        "mysql+pymysql://root:siavash@127.0.0.1:33063/flask_db",
-    )
+    # export GITVISOR_API_DATABASE_URL=mysql+pymysql://root:siavash@127.0.0.1:33063/flask_db
+    SQLALCHEMY_DATABASE_URI = environ.get("GITVISOR_API_DATABASE_URL", None)
 
     SQLALCHEMY_ECHO = DEBUG
 
