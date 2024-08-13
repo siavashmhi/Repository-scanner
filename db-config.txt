@@ -1,0 +1,4 @@
+1- export GITVISOR_API_DATABASE_URL=mysql+pymysql://root:siavash@127.0.0.1:33063/flask_db
+
+2- connect to the database -->  mysql -h 127.0.0.1 -P 33063 -u root -p 
+  

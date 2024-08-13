@@ -5,9 +5,14 @@ from api.util import jsonify
 
 class RepositoryController:
     def get_repositories():
-        return jsonify(status=501, code=101)
+        try:
+            repositories = Repository.query.all()
+        except:
+            return jsonify(status=500, code=102)
+        repositories_schema = RepositorySchema(many=True)
+        return jsonify(repositories_schema.dump(repositories))
 
-    def get_repository(repository_id):
+    def get_repository(repository_id): 
         return jsonify(status=501, code=101)
 
     def create_repository():
