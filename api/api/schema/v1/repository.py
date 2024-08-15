@@ -11,4 +11,4 @@ class RepositorySchema(ma.SQLAlchemySchema):
     url = ma.auto_field()
     created_at = ma.auto_field(dump_only=True)
     last_update_at = ma.auto_field(dump_only=True)
-    status = ma.auto_field(dump_only=True)
+    status = ma.auto_field()
