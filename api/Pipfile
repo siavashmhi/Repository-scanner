@@ -19,6 +19,9 @@ pytz = "*"
 marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 flask-marshmallow = "*"
+pytest = "*"
+pytest-order = "*"
+coverage = "*"
 
 [dev-packages]
 black = "*"
