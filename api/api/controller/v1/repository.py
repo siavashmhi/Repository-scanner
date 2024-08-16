@@ -114,6 +114,11 @@ class RepositoryController:
         return jsonify(repository_schema.dump(repository))
 
     def delete_repository(repository_id):
+        """
+        get one repository with repository_id,
+        and delete that repository if status of repository not in status_codes list.
+        """
+
         status_codes = ["ACCEPTED", "PROCESSING"]
 
         try:
