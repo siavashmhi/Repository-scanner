@@ -12,5 +12,5 @@ def create_app():
     mg.init_app(app, db)
     ma.init_app(app)
     app.register_blueprint(apiv1_bp)
-    print(app.config)
+    # print(app.config)
     return app
