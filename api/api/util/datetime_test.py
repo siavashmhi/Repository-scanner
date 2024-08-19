@@ -1,10 +1,14 @@
-import pytest
-
-from api.config import Config
-from .datetime import now
 from datetime import datetime
+
+import pytest
 from pytz import timezone
 
+from api.config import Config
+
+from .datetime import now
+
+
+@pytest.mark.order(1)
 def test_now():
     app_result = now()
     sys_result = datetime.now(tz=timezone(Config.TIMEZONE))
