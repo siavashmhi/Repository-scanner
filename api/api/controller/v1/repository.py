@@ -29,11 +29,12 @@ class RepositoryController:
         and create repository schema.
         """
         try:
-            repository = Repository.query.get(repository_id)
+            # repository = Repository.query.get(repository_id) ## this is deprecated.
+            repository = db.session.get(Repository, repository_id)
         except:
             return jsonify(status=500, code=102)
         if repository is None:
-            return jsonify(status=500, code=105)
+            return jsonify(status=404, code=105)
 
         try:
             repository_schema = RepositorySchema()
