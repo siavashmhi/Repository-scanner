@@ -11,7 +11,53 @@ services:
       - "33063:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - app_net
+
+  db_init:
+    image: mysql:latest
+    container_name: db_init
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: siavash
+    command: >
+      /bin/bash -c "
+      while ! mysqladmin ping -h db --silent; do
+        echo 'Waiting for MySQL to be ready...';
+        sleep 2;
+      done;
+      echo 'Creating database...';
+      mysql -h db -P 3306 -u root -psiavash -e 'CREATE DATABASE IF NOT EXISTS flask_db;'
+      "
+    networks:
+      - app_net
+    restart: "no"
+
+  flask_app:
+    image: flask-api:v1
+    container_name: app
+    ports:
+      - "6000:8000"
+    restart: always
+    environment:
+      - PIPENV_IGNORE_VIRTUALENVS=1
+      - PIPENV_VENV_IN_PROJECT=1
+      - GITVISOR_API_DATABASE_URL=mysql+pymysql://root:siavash@db:3306/flask_db
+    depends_on:
+      - mysql 
+    networks:
+      - app_net
+    healthcheck:
+      test: ["CMD", "curl", "-i", "http://localhost:8000/api/v1/repositories"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
 
 volumes:
   mysql_data:
 
+networks:
+  app_net:
+    driver: bridge
