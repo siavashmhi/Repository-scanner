@@ -41,7 +41,6 @@ services:
       - "6000:8000"
     restart: always
     environment:
-      - PIPENV_IGNORE_VIRTUALENVS=1
       - PIPENV_VENV_IN_PROJECT=1
       - GITVISOR_API_DATABASE_URL=mysql+pymysql://root:siavash@db:3306/flask_db
     depends_on:
