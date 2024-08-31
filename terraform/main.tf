@@ -13,8 +13,9 @@ resource "hcloud_network_subnet" "subnet" {
 }
 
 # Create 4 Ubuntu servers with the specified SSH key, server type, and location
-resource "hcloud_server" "master_server_1" {
-  name        = "master-server-1"
+resource "hcloud_server" "servers" {
+  for_each    = var.virtual_machines
+  name        = each.value.server_name
   image       = "ubuntu-22.04"
   server_type = "cx21"
   location    = "nbg1"
@@ -23,40 +24,27 @@ resource "hcloud_server" "master_server_1" {
   network {
     network_id = hcloud_network.cluster_network.id
   }
+
+  depends_on = [
+    hcloud_network.cluster_network,
+    hcloud_network_subnet.subnet
+  ]
 }
 
-resource "hcloud_server" "master_server_2" {
-  name        = "master-server-2"
-  image       = "ubuntu-22.04"
-  server_type = "cx21"
-  location    = "nbg1"
-  ssh_keys    = ["Siavash-MacOs"]
+# resource "hcloud_server" "servers" {
+#   count       = length(var.ubuntu_servers)
+#   name        = var.ubuntu_servers[count.index]
+#   image       = "ubuntu-22.04"
+#   server_type = "cx21"
+#   location    = "nbg1"
+#   ssh_keys    = ["Siavash-MacOs"]
 
-  network {
-    network_id = hcloud_network.cluster_network.id
-  }
-}
+#   network {
+#     network_id = hcloud_network.cluster_network.id
+#   }
 
-resource "hcloud_server" "worker_server_1" {
-  name        = "worker-server-1"
-  image       = "ubuntu-22.04"
-  server_type = "cx21"
-  location    = "nbg1"
-  ssh_keys    = ["Siavash-MacOs"]
-
-  network {
-    network_id = hcloud_network.cluster_network.id
-  }
-}
-
-resource "hcloud_server" "worker_server_2" {
-  name        = "worker-server-2"
-  image       = "ubuntu-22.04"
-  server_type = "cx21"
-  location    = "nbg1"
-  ssh_keys    = ["Siavash-MacOs"]
-
-  network {
-    network_id = hcloud_network.cluster_network.id
-  }
-}
+#   depends_on = [
+#     hcloud_network.cluster_network,
+#     hcloud_network_subnet.subnet
+#   ]
+# }
