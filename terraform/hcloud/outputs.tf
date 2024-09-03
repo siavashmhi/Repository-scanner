@@ -12,3 +12,4 @@ output "server_ips" {
 #     server_name => hcloud_server.servers[idx].ipv4_address
 #   }
 # }
+ 
