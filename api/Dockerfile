@@ -1,30 +1,40 @@
-# Use an official Python runtime as a parent image
-FROM python:3.10-slim
+FROM python:3.10-alpine AS builder
 
-# Set the working directory in the container
-WORKDIR /app
+WORKDIR /opt/app
 
-# Install curl and other necessary packages
-RUN apt-get update && apt-get install -y curl
+COPY Pipfile Pipfile.lock .
 
-# Install pipenv
-RUN pip install pipenv
+RUN pip install pipenv && PIPENV_VENV_IN_PROJECT=1 pipenv install
 
-# Set environment variable to create virtual environment in the project directory
-ENV PIPENV_VENV_IN_PROJECT=1
+FROM python:3.10-alpine AS starter
 
-# Copy the Pipfile and Pipfile.lock into the container at /app
-COPY . .
+RUN addgroup -g 1000 app && \
+  adduser -u 1000 -h /opt/app -g app -s /bin/sh -G app -DH app
 
-COPY Pipfile Pipfile.lock ./
+RUN mkdir /opt/app && chown app:app /opt/app
 
-RUN rm -rf .venv
+USER 1000
 
-# Install dependencies
-RUN pipenv install 
+WORKDIR /opt/app
 
-# Expose the port the app runs on
+COPY --chown=app:app --from=builder /opt/app/.venv .venv
+
+COPY --chown=app:app . .
+
 EXPOSE 8000
 
-# Run the application using gunicorn
-CMD ["pipenv", "run", "gunicorn"]
+ENV GITVISOR_API_ENV=production
+
+ENV GITVISOR_API_DEBUG=0
+
+ENV GITVISOR_API_TESTING=0
+
+# ENV GITVISOR_API_SECRET_KEY=secretkey
+
+ENV GITVISOR_API_DATABASE_URI=None
+
+ENV GITVISOR_API_TIMEZONE=Europe/London
+
+ENV PATH="/opt/app/.venv/bin:$PATH"
+
+CMD ["gunicorn"]
