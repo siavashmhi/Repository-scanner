@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  app: 
+    image: docker.io/siavashmhi/repovisor-api:latest
+    build: ../../api
+    environment:
+      GITVISOR_API_SECRET_KEY: ${GITVISOR_API_SECRET_KEY} 
+      GITVISOR_API_DATABASE_URI: ${GITVISOR_API_DATABASE_URI}
+      GITVISOR_API_ENV: ${GITVISOR_API_ENV}
+      GITVISOR_API_DEBUG: ${GITVISOR_API_DEBUG}
+      GITVISOR_API_TESTING: ${GITVISOR_API_TESTING}
+      EGITVISOR_API_TIMEZONE: ${EGITVISOR_API_TIMEZONE}
+    pull_policy: build
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - 8000:8000/tcp
+    networks:
+      - db
+      - edge
+    healthcheck:
+      test: ["CMD-SHELL", "kill -1 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+    depends_on:
+      mysql:
+        condition: service_healthy
+    labels:
+      - "ir.cloudflow.name.app-name=api"
+      - "ir.cloudflow.name.part-of=repovisor"
+      - "ir.cloudflow.name.type=application"
+
+  mysql: 
+    image: mysql:8
+    pull_policy: always
+    restart: unless-stopped
+    container_name: db
+    expose:
+      - 3306/tcp
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}  
+      MYSQL_DATABASE: ${MYSQL_DATABASE}          
+      MYSQL_USER: ${MYSQL_USER}               
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}  
+    volumes:
+      - mysql_data:/var/lib/mysql  
+    networks:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -uroot -p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 30s
+      # start_interval: 2s
+    labels:
+      - "ir.cloudflow.name.app-name=mysql"
+      - "ir.cloudflow.name.part-of=repovisor"
+      - "ir.cloudflow.name.type=service"
+
+volumes:
+  mysql_data:
+    name: mysql_data
+
+networks:
+  db:
+    name: db
+    driver: bridge
+  edge:
+    name: edge
+    driver: bridge
