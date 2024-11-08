@@ -27,10 +27,37 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      api-migration:
+        condition: service_completed_successfully
     labels:
       - "ir.cloudflow.name.app-name=api"
       - "ir.cloudflow.name.part-of=repovisor"
       - "ir.cloudflow.name.type=application"
+
+  api-migration: 
+    image: docker.io/siavashmhi/repovisor-api:latest
+    container_name: api-migration
+    build: ../../api
+    command: ["flask", "db", "upgrade"]
+    environment:
+      GITVISOR_API_SECRET_KEY: ${GITVISOR_API_SECRET_KEY} 
+      GITVISOR_API_DATABASE_URI: ${GITVISOR_API_DATABASE_URI}
+      GITVISOR_API_ENV: ${GITVISOR_API_ENV}
+      GITVISOR_API_DEBUG: ${GITVISOR_API_DEBUG}
+      GITVISOR_API_TESTING: ${GITVISOR_API_TESTING}
+      EGITVISOR_API_TIMEZONE: ${EGITVISOR_API_TIMEZONE}
+    pull_policy: build
+    restart: "no"
+    networks:
+      - db
+      - edge
+    depends_on:
+      mysql:
+        condition: service_healthy
+    labels:
+      - "ir.cloudflow.name.app-name=api-migration"
+      - "ir.cloudflow.name.part-of=repovisor"
+      - "ir.cloudflow.name.type=job"
 
   mysql: 
     image: mysql:8
